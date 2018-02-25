@@ -17,7 +17,7 @@ See instructions from the Cadence Client README for the instructions.
 
 After cadence-client library is available just run
 
-    mvn compile
+    ./gradlew build`
     
 to build the samples. Verify that they actually can run:
 
