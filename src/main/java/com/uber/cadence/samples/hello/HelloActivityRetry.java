@@ -30,16 +30,13 @@ import java.time.Duration;
 import static com.uber.cadence.samples.common.SampleConstants.DOMAIN;
 
 /**
- * Hello World Cadence workflow that retries an activity using exponential backoff algorithm.
+ * Demonstrates activity retries using exponential backoff algorithm.
  * Requires a local instance of Cadence server running.
  */
 public class HelloActivityRetry {
 
     private static final String TASK_LIST = "HelloActivity";
 
-    /**
-     * Workflow interface has to have at least one method annotated with @WorkflowMethod.
-     */
     public interface GreetingWorkflow {
         /**
          * @return greeting string
@@ -48,15 +45,13 @@ public class HelloActivityRetry {
         String getGreeting(String name);
     }
 
-    /**
-     * Activity interface is just a POJI
-     */
     public interface GreetingActivities {
         String composeGreeting(String greeting, String name);
     }
 
     /**
-     * GreetingWorkflow implementation that calls GreetingsActivities#printIt.
+     * GreetingWorkflow implementation that demonstrates activity stub configured with
+     * {@link RetryOptions}.
      */
     public static class GreetingWorkflowImpl implements GreetingWorkflow {
 
@@ -87,7 +82,7 @@ public class HelloActivityRetry {
         private long lastInvocationTime;
 
         @Override
-        public String composeGreeting(String greeting, String name) {
+        public synchronized String composeGreeting(String greeting, String name) {
             if (lastInvocationTime != 0) {
                 long timeSinceLastInvocation = System.currentTimeMillis() - lastInvocationTime;
                 System.out.print(timeSinceLastInvocation + " milliseconds since last invocation. ");

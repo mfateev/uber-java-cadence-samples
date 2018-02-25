@@ -29,7 +29,7 @@ import com.uber.cadence.workflow.WorkflowMethod;
 import static com.uber.cadence.samples.common.SampleConstants.DOMAIN;
 
 /**
- * Hello World Cadence workflow that executes two sequences of activities in parallel.
+ * Demonstrates async invocation of an entire sequence of activities.
  * Requires a local instance of Cadence server running.
  */
 public class HelloAsyncLambda {
