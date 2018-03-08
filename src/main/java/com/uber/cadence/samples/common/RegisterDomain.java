@@ -36,7 +36,7 @@ import static com.uber.cadence.samples.common.SampleConstants.DOMAIN;
 public class RegisterDomain {
 
     public static void main(String[] args) throws TException, IOException {
-        WorkflowService.Iface swfService = new WorkflowServiceTChannel();
+        WorkflowService.Iface cadenceService = new WorkflowServiceTChannel();
         RegisterDomainRequest request = new RegisterDomainRequest();
         request.setDescription("Java Samples");
         request.setEmitMetric(false);
@@ -44,7 +44,7 @@ public class RegisterDomain {
         int retentionPeriodInDays = 1;
         request.setWorkflowExecutionRetentionPeriodInDays(retentionPeriodInDays);
         try {
-            swfService.RegisterDomain(request);
+            cadenceService.RegisterDomain(request);
             System.out.println("Successfully registered domain \"" + DOMAIN + "\" with retentionDays=" + retentionPeriodInDays);
         } catch (DomainAlreadyExistsError e) {
             System.out.println("Domain \"" + DOMAIN + "\" is already registered");

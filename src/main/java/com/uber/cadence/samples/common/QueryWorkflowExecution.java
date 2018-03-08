@@ -39,7 +39,7 @@ public class QueryWorkflowExecution {
                     " <queryType> <workflowId> [<runId>]");
             System.exit(1);
         }
-        WorkflowService.Iface swfService = new WorkflowServiceTChannel();
+        WorkflowService.Iface cadenceService = new WorkflowServiceTChannel();
 
         String queryType = args[0];
 
@@ -50,7 +50,7 @@ public class QueryWorkflowExecution {
             String runId = args[1];
             workflowExecution.setRunId(runId);
         }
-        WorkflowClient client = WorkflowClient.newInstance(swfService, DOMAIN);
+        WorkflowClient client = WorkflowClient.newInstance(cadenceService, DOMAIN);
         UntypedWorkflowStub workflow = client.newUntypedWorkflowStub(workflowExecution);
         String result = workflow.query(queryType, String.class);
 

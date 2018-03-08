@@ -37,7 +37,7 @@ public class QueryWorkflowExecutionLocalReplay {
                     + "<workflow implementation class> <workflowId> <runId> <queryType>");
             System.exit(1);
         }
-        WorkflowService.Iface swfService = new WorkflowServiceTChannel();
+        WorkflowService.Iface cadenceService = new WorkflowServiceTChannel();
 
         WorkflowExecution workflowExecution = new WorkflowExecution();
         String workflowId = args[1];
@@ -49,7 +49,7 @@ public class QueryWorkflowExecutionLocalReplay {
         String implementationTypeName = args[0];
         @SuppressWarnings("unchecked")
         Class<Object> workflowImplementationType = (Class<Object>) Class.forName(implementationTypeName);
-        Worker replayer = new Worker(swfService, DOMAIN, null, null);
+        Worker replayer = new Worker(cadenceService, DOMAIN, null, null);
         replayer.registerWorkflowImplementationTypes(workflowImplementationType);
         System.out.println("Beginning query replay for " + workflowExecution);
         String queryResult = replayer.queryWorkflowExecution(workflowExecution, queryType, String.class);

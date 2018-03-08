@@ -35,12 +35,12 @@ public class WorkflowExecutionHistoryPrinter {
             System.err.println("Usage: java " + WorkflowExecutionHistoryPrinter.class.getName() + " <workflowId> <runId>");
             System.exit(1);
         }
-        WorkflowService.Iface swfService = new WorkflowServiceTChannel();
+        WorkflowService.Iface cadenceService = new WorkflowServiceTChannel();
         WorkflowExecution workflowExecution = new WorkflowExecution();
         String workflowId = args[0];
         workflowExecution.setWorkflowId(workflowId);
         String runId = args[1];
         workflowExecution.setRunId(runId);
-        System.out.println(WorkflowExecutionUtils.prettyPrintHistory(swfService, DOMAIN, workflowExecution, true));
+        System.out.println(WorkflowExecutionUtils.prettyPrintHistory(cadenceService, DOMAIN, workflowExecution, true));
     }
 }
