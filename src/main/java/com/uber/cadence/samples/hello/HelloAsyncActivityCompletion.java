@@ -75,8 +75,8 @@ public class HelloAsyncActivityCompletion {
 
         /**
          * Demonstrates how implement an activity asynchronously.
-         * When @DoNotCompleteOnReturn is present activity implementation function returning doesn't complete
-         * the activity.
+         * When {@link Activity#doNotCompleteOnReturn()} is called the activity implementation function returning
+         * doesn't complete the activity.
          */
         @Override
         public String composeGreeting(String greeting, String name) {
