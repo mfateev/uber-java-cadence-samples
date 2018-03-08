@@ -72,7 +72,9 @@ public class AverageCalculatorActivitiesImpl implements AverageCalculatorActivit
                 sum += Integer.parseInt(line);
             }
         } catch (IOException e) {
-            throw Activity.throwWrapped(e);
+            // Wrap it as checked exceptions in activity and workflow interface methods are prohibited.
+            // It will be unwrapped and attached as a cause to the ActivityFailureException.
+            throw Activity.wrap(e);
         } finally {
             try {
                 if (reader != null) {
