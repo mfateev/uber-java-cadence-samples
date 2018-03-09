@@ -29,7 +29,7 @@ These samples demonstrate various capabilities of Java Cadence client and server
 
 Run the following commands:
 
-      git clone gitolite@code.uber.internal:devexp/cadence-java-client-samples
+      git clone https://github.com/mfateev/uber-java-cadence-samples
       cd cadence-java-client-samples
 
 ## Import into IntelliJ
@@ -41,9 +41,7 @@ choose **Gradle** and then click **Next**->**Finish**.
 
 ## Build the Samples
 
-To get the dependencies, you need access to [Artifactory](https://artifactory.uberinternal.com).
-Sign in to the VPN using [Juno Pulse](https://team.uberinternal.com/display/HC/VPN+Instructions), and
-then run the following command:
+Assumng that the https://github.com/uber-java/cadence-client is in local maven cache.
 
       ./gradlew build
 
