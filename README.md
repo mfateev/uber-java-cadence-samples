@@ -79,6 +79,26 @@ top right corner from "Open" to "Closed" to see the list of the completed workfl
 Click on a *RUN ID* of a workflow to see more details about it. Try different view formats to get a different level
 of details about the execution history.
 
+## Install Cadence CLI
+
+    brew install cadence
+
+To not pass the domain on every command set the following environment variable:
+
+    export CADENCE_CLI_DOMAIN=sample
+
+After the CADENCE_CLI_DOMAIN is set, to list closed workflow executions run:
+
+    cadence workflow list
+
+To see a history of a particular workflow execution:
+
+    cadence workflow showid <WorkflowID>
+
+To see a stack trace of a currently running workflow execution:
+
+    ./cadence workflow stack -w <WorkflowID>
+
 ## Run the samples
 
 Each sample has specific requirements for running it. The following sections contain information about
