@@ -1,8 +1,8 @@
 # Java Cadence Samples
 These samples demonstrate various capabilities of Java Cadence client and server. You can learn more about Cadence at:
-* Cadence: https://github.com/uber/cadence
-* Java Cadence Client: https://github.com/uber-java/cadence-client
-* Go Cadence Client: https://github.com/uber-go/cadence-client
+* [Cadence Service](https://github.com/uber/cadence)
+* [Cadence Java Client](https://code.uberinternal.com/diffusion/DECADIY/)
+* [Go Cadence Client](https://github.com/uber-go/cadence-client)
 
 ## Overview of the Samples
 
@@ -63,9 +63,21 @@ If this does not work, see the instructions for running Cadence Server at https:
 
 ## Register the Domain
 
-To register the domain, run the follownig command once before running any samples:
+To register the *sample* domain, run the following command once before running any samples:
 
     ./gradlew -q execute -PmainClass=com.uber.cadence.samples.common.RegisterDomain
+
+## See Cadence UI
+
+The Cadence Server running in a docker container includes web UI.
+
+Connect to [http://localhost:8088](http://localhost:8088)
+
+Enter the *sample* domain. You'll see "No Results" page. After running any sample change the filter in the 
+top right corner from "Open" to "Closed" to see the list of the completed workflows.
+
+Click on a *RUN ID* of a workflow to see more details about it. Try different view formats to get a different level
+of details about the execution history.
 
 ## Run the samples
 
