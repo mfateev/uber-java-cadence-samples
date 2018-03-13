@@ -69,11 +69,12 @@ To register the *sample* domain, run the following command once before running a
 
 ## See Cadence UI
 
-The Cadence Server running in a docker container includes web UI.
+The Cadence Server running in a docker container includes a Web UI.
 
-Connect to [http://localhost:8088](http://localhost:8088)
+Connect to [http://localhost:8088](http://localhost:8088).
 
-Enter the *sample* domain. You'll see "No Results" page. After running any sample change the filter in the
+Enter the *sample* domain. You'll see a "No Results" page. After running any sample, change the 
+filter in the
 top right corner from "Open" to "Closed" to see the list of the completed workflows.
 
 Click on a *RUN ID* of a workflow to see more details about it. Try different view formats to get a different level
@@ -81,7 +82,7 @@ of details about the execution history.
 
 ## Install Cadence CLI
 
-Checkout [Cadence Service](https://github.com/uber/cadence) and run **make bins**.
+Check out [Cadence Service](https://github.com/uber/cadence) and run **make bins**.
 CLI executable named **cadence** will be in the root directory.
 
 To not pass the domain on every command set the following environment variable:
@@ -92,11 +93,11 @@ After the CADENCE_CLI_DOMAIN is set, to list closed workflow executions run:
 
     cadence workflow list
 
-To see a history of a particular workflow execution:
+To see a history of a particular workflow execution run:
 
     cadence workflow showid <WorkflowID>
 
-To see a stack trace of a currently running workflow execution:
+To see a stack trace of a currently running workflow execution run:
 
     ./cadence workflow stack -w <WorkflowID>
 
