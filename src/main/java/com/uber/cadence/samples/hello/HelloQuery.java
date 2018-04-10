@@ -32,7 +32,7 @@ import java.time.Duration;
  */
 public class HelloQuery {
 
-    private static final String TASK_LIST = "HelloQuery";
+    static final String TASK_LIST = "HelloQuery";
 
     public interface GreetingWorkflow {
 

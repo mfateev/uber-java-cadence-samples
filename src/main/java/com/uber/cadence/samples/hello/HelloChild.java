@@ -26,15 +26,15 @@ import com.uber.cadence.workflow.Workflow;
 import com.uber.cadence.workflow.WorkflowMethod;
 
 /**
- * Demonstrates child workflow.
- * Requires a local instance of Cadence server running.
+ * Demonstrates a child workflow.
+ * Requires a local instance of the Cadence server running.
  */
 public class HelloChild {
 
     private static final String TASK_LIST = "HelloChild";
 
     /**
-     * Workflow interface has to have at least one method annotated with @WorkflowMethod.
+     * A workflow interface must have exactly one method annotated with the @WorkflowMethod.
      */
     public interface GreetingWorkflow {
         /**
@@ -45,7 +45,7 @@ public class HelloChild {
     }
 
     /**
-     * Activity interface is just a POJI
+     * The child workflow interface.
      */
     public interface GreetingChild {
         @WorkflowMethod
@@ -59,19 +59,20 @@ public class HelloChild {
 
         @Override
         public String getGreeting(String name) {
-            // Workflows are stateful. So new stub must be created for each new child.
-            GreetingChild child = Workflow.newWorkflowStub(GreetingChild.class);
+            // Workflows are stateful. So a new stub must be created for each new child.
+            GreetingChild child = Workflow.newChildWorkflowStub(GreetingChild.class);
 
-            // This is blocking call that returns only after child is completed.
+            // This is a blocking call that returns only after the child has completed.
             Promise<String> greeting = Async.function(child::composeGreeting, "Hello", name);
             // Do something else here
-            return greeting.get(); // blocks waiting for child to complete
+            return greeting.get(); // blocks waiting for the child to complete.
         }
     }
 
     /**
-     * Child workflow implementation.
-     * Workflow implementation must always be public for the Cadence to be able to create instances.
+     * The child workflow implementation.
+     * A workflow implementation must always be public for the Cadence to be able to create
+     * instances.
      */
     public static class GreetingChildImpl implements GreetingChild {
         @Override

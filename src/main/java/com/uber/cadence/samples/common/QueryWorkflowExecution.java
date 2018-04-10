@@ -19,10 +19,11 @@ package com.uber.cadence.samples.common;
 import static com.uber.cadence.samples.common.SampleConstants.DOMAIN;
 
 import com.uber.cadence.WorkflowExecution;
-import com.uber.cadence.client.UntypedWorkflowStub;
 import com.uber.cadence.client.WorkflowClient;
+import com.uber.cadence.client.WorkflowStub;
 import com.uber.cadence.serviceclient.IWorkflowService;
 import com.uber.cadence.serviceclient.WorkflowServiceTChannel;
+import java.util.Optional;
 
 /**
  * Simple example utility to query workflow execution using Cadence query API.
@@ -51,7 +52,7 @@ public class QueryWorkflowExecution {
             workflowExecution.setRunId(runId);
         }
         WorkflowClient client = WorkflowClient.newInstance(cadenceService, DOMAIN);
-        UntypedWorkflowStub workflow = client.newUntypedWorkflowStub(workflowExecution);
+        WorkflowStub workflow = client.newUntypedWorkflowStub(workflowExecution, Optional.empty());
         String result = workflow.query(queryType, String.class);
 
         System.out.println("Query result for " + workflowExecution + ":");

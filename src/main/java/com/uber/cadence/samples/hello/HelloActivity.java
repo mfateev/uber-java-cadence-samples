@@ -30,7 +30,7 @@ import com.uber.cadence.workflow.WorkflowMethod;
  */
 public class HelloActivity {
 
-    private static final String TASK_LIST = "HelloActivity";
+    static final String TASK_LIST = "HelloActivity";
 
     /**
      * Workflow interface has to have at least one method annotated with @WorkflowMethod.
@@ -69,7 +69,7 @@ public class HelloActivity {
         }
     }
 
-    private static class GreetingActivitiesImpl implements GreetingActivities {
+    static class GreetingActivitiesImpl implements GreetingActivities {
         @Override
         public String composeGreeting(String greeting, String name) {
             return greeting + " " + name + "!";

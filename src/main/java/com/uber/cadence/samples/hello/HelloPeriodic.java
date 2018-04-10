@@ -24,13 +24,14 @@ import com.uber.cadence.WorkflowIdReusePolicy;
 import com.uber.cadence.activity.Activity;
 import com.uber.cadence.activity.ActivityOptions;
 import com.uber.cadence.client.DuplicateWorkflowException;
-import com.uber.cadence.client.UntypedWorkflowStub;
 import com.uber.cadence.client.WorkflowClient;
 import com.uber.cadence.client.WorkflowException;
+import com.uber.cadence.client.WorkflowStub;
 import com.uber.cadence.worker.Worker;
 import com.uber.cadence.workflow.Workflow;
 import com.uber.cadence.workflow.WorkflowMethod;
 import java.time.Duration;
+import java.util.Optional;
 
 /**
  * Demonstrates a "cron" workflow that executes activity periodically.
@@ -127,7 +128,8 @@ public class HelloPeriodic {
         while (true) {
             // Print reason of failure of the previous run, before restarting.
             if (execution != null) {
-                UntypedWorkflowStub workflow = workflowClient.newUntypedWorkflowStub(execution);
+                WorkflowStub workflow = workflowClient.newUntypedWorkflowStub(execution,
+                    Optional.empty());
                 try {
                     workflow.getResult(Void.class); //
                 } catch (WorkflowException e) {
