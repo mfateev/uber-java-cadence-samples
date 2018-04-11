@@ -29,7 +29,7 @@ import com.uber.cadence.workflow.WorkflowMethod;
 /** Demonstrates a child workflow. Requires a local instance of the Cadence server running. */
 public class HelloChild {
 
-  private static final String TASK_LIST = "HelloChild";
+  static final String TASK_LIST = "HelloChild";
 
   /** Parent workflow interface */
   public interface GreetingWorkflow {
