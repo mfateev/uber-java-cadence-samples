@@ -36,7 +36,7 @@ import java.util.concurrent.ForkJoinPool;
  */
 public class HelloAsyncActivityCompletion {
 
-  private static final String TASK_LIST = "HelloAsyncActivityCompletion";
+  static final String TASK_LIST = "HelloAsyncActivityCompletion";
 
   public interface GreetingWorkflow {
     /** @return greeting string */
@@ -68,8 +68,12 @@ public class HelloAsyncActivityCompletion {
     }
   }
 
-  private static class GreetingActivitiesImpl implements GreetingActivities {
-    WorkflowClient workflowClient = WorkflowClient.newInstance(DOMAIN);
+  static class GreetingActivitiesImpl implements GreetingActivities {
+    private final ActivityCompletionClient completionClient;
+
+    GreetingActivitiesImpl(ActivityCompletionClient completionClient) {
+      this.completionClient = completionClient;
+    }
 
     /**
      * Demonstrates how implement an activity asynchronously. When {@link
@@ -89,25 +93,28 @@ public class HelloAsyncActivityCompletion {
     }
 
     private void composeGreetingAsync(byte[] taskToken, String greeting, String name) {
-      // To complete activity from a different thread or process use ActivityCompletionClient.
-      ActivityCompletionClient completionClient = workflowClient.newActivityCompletionClient();
       String result = greeting + " " + name + "!";
+      // To complete activity from a different thread or process uses ActivityCompletionClient.
+      // In real applications it is initialized by a process that performs the completion.
       completionClient.complete(taskToken, result);
     }
   }
 
   public static void main(String[] args) throws ExecutionException, InterruptedException {
+    // Start a workflow execution. Usually it is done from another program.
+    WorkflowClient workflowClient = WorkflowClient.newInstance(DOMAIN);
+
     // Start a worker that hosts both workflow and activity implementation
     Worker worker = new Worker(DOMAIN, TASK_LIST);
     // Workflows are stateful. So need a type to create instances.
     worker.registerWorkflowImplementationTypes(GreetingWorkflowImpl.class);
     // Activities are stateless and thread safe. So a shared instance is used.
-    worker.registerActivitiesImplementations(new GreetingActivitiesImpl());
+    // CompletionClient is passed to activity here only to support unit testing.
+    ActivityCompletionClient completionClient = workflowClient.newActivityCompletionClient();
+    worker.registerActivitiesImplementations(new GreetingActivitiesImpl(completionClient));
     // Start listening to the workflow and activity task lists.
     worker.start();
 
-    // Start a workflow execution. Usually it is done from another program.
-    WorkflowClient workflowClient = WorkflowClient.newInstance(DOMAIN);
     // Get a workflow stub using the same task list the worker uses.
     GreetingWorkflow workflow = workflowClient.newWorkflowStub(GreetingWorkflow.class);
     // Execute a workflow returning a future that can be used to wait for the workflow
