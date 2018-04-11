@@ -35,7 +35,7 @@ import java.time.Duration;
  */
 public class HelloActivityRetry {
 
-  private static final String TASK_LIST = "HelloActivityRetry";
+  static final String TASK_LIST = "HelloActivityRetry";
 
   public interface GreetingWorkflow {
     /** @return greeting string */
@@ -78,7 +78,7 @@ public class HelloActivityRetry {
     }
   }
 
-  private static class GreetingActivitiesImpl implements GreetingActivities {
+  static class GreetingActivitiesImpl implements GreetingActivities {
     private int callCount;
     private long lastInvocationTime;
 
