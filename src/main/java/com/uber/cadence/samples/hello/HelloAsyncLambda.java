@@ -35,7 +35,7 @@ import java.time.Duration;
  */
 public class HelloAsyncLambda {
 
-  private static final String TASK_LIST = "HelloAsyncLambda";
+  static final String TASK_LIST = "HelloAsyncLambda";
 
   public interface GreetingWorkflow {
     /** @return greeting string */
@@ -86,7 +86,7 @@ public class HelloAsyncLambda {
     }
   }
 
-  private static class GreetingActivitiesImpl implements GreetingActivities {
+  static class GreetingActivitiesImpl implements GreetingActivities {
 
     @Override
     public String getGreeting() {
