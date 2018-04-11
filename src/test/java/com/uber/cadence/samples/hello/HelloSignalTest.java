@@ -17,73 +17,74 @@
 
 package com.uber.cadence.samples.hello;
 
-import static com.uber.cadence.samples.common.SampleConstants.DOMAIN;
+import static org.junit.Assert.assertEquals;
 
 import com.uber.cadence.client.WorkflowClient;
 import com.uber.cadence.client.WorkflowOptions;
+import com.uber.cadence.samples.hello.HelloSignal.GreetingWorkflow;
+import com.uber.cadence.testing.TestWorkflowEnvironment;
 import com.uber.cadence.worker.Worker;
-import com.uber.cadence.workflow.CompletablePromise;
-import com.uber.cadence.workflow.SignalMethod;
-import com.uber.cadence.workflow.Workflow;
-import com.uber.cadence.workflow.WorkflowMethod;
 import java.time.Duration;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 
-/**
- * Demonstrates asynchronous signalling of a workflow. Requires a local instance of Cadence server
- * running.
- */
-@SuppressWarnings("ALL")
-public class HelloSignal {
+/** Unit test for {@link HelloSignal}. Doesn't use an external Cadence service. */
+public class HelloSignalTest {
 
-  static final String TASK_LIST = "HelloSignal";
+  /** Prints a history of the workflow under test in case of a test failure. */
+  @Rule
+  public TestWatcher watchman =
+      new TestWatcher() {
+        @Override
+        protected void failed(Throwable e, Description description) {
+          if (testEnv != null) {
+            System.err.println(testEnv.getDiagnostics());
+          }
+        }
+      };
 
-  /** Workflow interface must have a method annotated with @WorkflowMethod. */
-  public interface GreetingWorkflow {
-    /** @return greeting string */
-    @WorkflowMethod
-    String getGreeting();
+  private TestWorkflowEnvironment testEnv;
+  private Worker worker;
+  private WorkflowClient workflowClient;
 
-    /** Receives name through an external signal. */
-    @SignalMethod
-    void waitForName(String name);
-  }
+  @Before
+  public void setUp() {
+    testEnv = TestWorkflowEnvironment.newInstance();
 
-  /** GreetingWorkflow implementation that returns a greeting. */
-  public static class GreetingWorkflowImpl implements GreetingWorkflow {
-
-    private final CompletablePromise<String> name = Workflow.newPromise();
-
-    @Override
-    public String getGreeting() {
-      return "Hello " + name.get() + "!";
-    }
-
-    @Override
-    public void waitForName(String name) {
-      this.name.complete(name);
-    }
-  }
-
-  public static void main(String[] args) {
-    // Start a worker that hosts the workflow implementation
-    Worker worker = new Worker(DOMAIN, TASK_LIST);
-    worker.registerWorkflowImplementationTypes(GreetingWorkflowImpl.class);
+    worker = testEnv.newWorker(HelloSignal.TASK_LIST);
+    worker.registerWorkflowImplementationTypes(HelloSignal.GreetingWorkflowImpl.class);
     worker.start();
 
-    // Start a workflow execution. Usually it is done from another program.
-    WorkflowClient workflowClient = WorkflowClient.newInstance(DOMAIN);
+    workflowClient = testEnv.newWorkflowClient();
+  }
+
+  @After
+  public void tearDown() {
+    testEnv.close();
+  }
+
+  @Test(timeout = 5000)
+  public void testSignal() {
     // Get a workflow stub using the same task list the worker uses.
     WorkflowOptions workflowOptions =
         new WorkflowOptions.Builder()
-            .setTaskList(TASK_LIST)
-            .setExecutionStartToCloseTimeout(Duration.ofSeconds(30))
+            .setTaskList(HelloSignal.TASK_LIST)
+            .setExecutionStartToCloseTimeout(Duration.ofDays(30))
             .build();
     GreetingWorkflow workflow =
         workflowClient.newWorkflowStub(GreetingWorkflow.class, workflowOptions);
+
     // Start workflow asynchronously to not use another thread to signal.
     WorkflowClient.start(workflow::getGreeting);
+
     // After start for getGreeting returns the workflow is guaranteed to be started.
-    // So we can send signal to it using workflow stub.
+    // So we can send signal to it using workflow stub immediately.
+    // But just to demonstrate the unit testing of a long running workflow adding a long sleep here.
+    testEnv.sleep(Duration.ofDays(1));
     workflow.waitForName("World");
     // Calling synchronous getGreeting after workflow has started reconnects to the existing
     // workflow and
@@ -92,7 +93,7 @@ public class HelloSignal {
     // with WorkflowIdReusePolicy.AllowDuplicate. In that case the call would fail with
     // WorkflowExecutionAlreadyStartedException.
     String greeting = workflow.getGreeting();
-    System.out.println(greeting);
-    System.exit(0);
+
+    assertEquals("Hello World!", greeting);
   }
 }
