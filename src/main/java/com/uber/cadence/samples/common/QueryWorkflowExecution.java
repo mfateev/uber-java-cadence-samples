@@ -14,6 +14,7 @@
  *  express or implied. See the License for the specific language governing
  *  permissions and limitations under the License.
  */
+
 package com.uber.cadence.samples.common;
 
 import static com.uber.cadence.samples.common.SampleConstants.DOMAIN;
@@ -26,36 +27,38 @@ import com.uber.cadence.serviceclient.WorkflowServiceTChannel;
 import java.util.Optional;
 
 /**
- * Simple example utility to query workflow execution using Cadence query API.
- * Cadence redirects query to any currently running workflow worker for the workflow type
- * of the requested workflow execution.
+ * Simple example utility to query workflow execution using Cadence query API. Cadence redirects
+ * query to any currently running workflow worker for the workflow type of the requested workflow
+ * execution.
  *
  * @author fateev
  */
 public class QueryWorkflowExecution {
-    
-    public static void main(String[] args) throws Exception {
-        if (args.length < 2 || args.length > 3) {
-            System.err.println("Usage: java " + QueryWorkflowExecution.class.getName() +
-                    " <queryType> <workflowId> [<runId>]");
-            System.exit(1);
-        }
-        IWorkflowService cadenceService = new WorkflowServiceTChannel();
 
-        String queryType = args[0];
-
-        WorkflowExecution workflowExecution = new WorkflowExecution();
-        String workflowId = args[1];
-        workflowExecution.setWorkflowId(workflowId);
-        if (args.length == 3) {
-            String runId = args[1];
-            workflowExecution.setRunId(runId);
-        }
-        WorkflowClient client = WorkflowClient.newInstance(cadenceService, DOMAIN);
-        WorkflowStub workflow = client.newUntypedWorkflowStub(workflowExecution, Optional.empty());
-        String result = workflow.query(queryType, String.class);
-
-        System.out.println("Query result for " + workflowExecution + ":");
-        System.out.println(result);
+  public static void main(String[] args) throws Exception {
+    if (args.length < 2 || args.length > 3) {
+      System.err.println(
+          "Usage: java "
+              + QueryWorkflowExecution.class.getName()
+              + " <queryType> <workflowId> [<runId>]");
+      System.exit(1);
     }
+    IWorkflowService cadenceService = new WorkflowServiceTChannel();
+
+    String queryType = args[0];
+
+    WorkflowExecution workflowExecution = new WorkflowExecution();
+    String workflowId = args[1];
+    workflowExecution.setWorkflowId(workflowId);
+    if (args.length == 3) {
+      String runId = args[1];
+      workflowExecution.setRunId(runId);
+    }
+    WorkflowClient client = WorkflowClient.newInstance(cadenceService, DOMAIN);
+    WorkflowStub workflow = client.newUntypedWorkflowStub(workflowExecution, Optional.empty());
+    String result = workflow.query(queryType, String.class);
+
+    System.out.println("Query result for " + workflowExecution + ":");
+    System.out.println(result);
+  }
 }
