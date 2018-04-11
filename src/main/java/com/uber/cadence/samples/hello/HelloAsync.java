@@ -34,7 +34,7 @@ import com.uber.cadence.workflow.WorkflowMethod;
  */
 public class HelloAsync {
 
-  private static final String TASK_LIST = "HelloAsync";
+  static final String TASK_LIST = "HelloAsync";
 
   public interface GreetingWorkflow {
     @WorkflowMethod(executionStartToCloseTimeoutSeconds = 15, taskList = TASK_LIST)
@@ -71,7 +71,7 @@ public class HelloAsync {
     }
   }
 
-  private static class GreetingActivitiesImpl implements GreetingActivities {
+  static class GreetingActivitiesImpl implements GreetingActivities {
     @Override
     public String composeGreeting(String greeting, String name) {
       return greeting + " " + name + "!";
