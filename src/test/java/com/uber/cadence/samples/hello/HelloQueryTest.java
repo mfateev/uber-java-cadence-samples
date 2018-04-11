@@ -1,3 +1,20 @@
+/*
+ *  Copyright 2012-2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ *  Modifications copyright (C) 2017 Uber Technologies, Inc.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License"). You may not
+ *  use this file except in compliance with the License. A copy of the License is
+ *  located at
+ *
+ *  http://aws.amazon.com/apache2.0
+ *
+ *  or in the "license" file accompanying this file. This file is distributed on
+ *  an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ *  express or implied. See the License for the specific language governing
+ *  permissions and limitations under the License.
+ */
+
 package com.uber.cadence.samples.hello;
 
 import static org.junit.Assert.assertEquals;
@@ -15,11 +32,10 @@ import org.junit.Test;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 
+/** Unit test for {@link HelloQuery}. Doesn't use an external Cadence service. */
 public class HelloQueryTest {
 
-  /**
-   * Prints a history of the workflow under test in case of a test failure.
-   */
+  /** Prints a history of the workflow under test in case of a test failure. */
   @Rule
   public TestWatcher watchman =
       new TestWatcher() {
@@ -43,7 +59,7 @@ public class HelloQueryTest {
     // Comment the above line and uncomment the below one to
     // See how the TestWatcher rule prints the history of the stuck
     // workflow as its decision task is never picked up.
-//    worker = testEnv.newWorker("InvalidTaskList");
+    //    worker = testEnv.newWorker("InvalidTaskList");
 
     worker.registerWorkflowImplementationTypes(HelloQuery.GreetingWorkflowImpl.class);
     worker.start();
@@ -59,12 +75,13 @@ public class HelloQueryTest {
   @Test(timeout = 5000)
   public void testQuery() {
     // Get a workflow stub using the same task list the worker uses.
-    WorkflowOptions workflowOptions = new WorkflowOptions.Builder()
-        .setTaskList(HelloQuery.TASK_LIST)
-        .setExecutionStartToCloseTimeout(Duration.ofSeconds(30))
-        .build();
-    GreetingWorkflow workflow = workflowClient.newWorkflowStub(GreetingWorkflow.class,
-        workflowOptions);
+    WorkflowOptions workflowOptions =
+        new WorkflowOptions.Builder()
+            .setTaskList(HelloQuery.TASK_LIST)
+            .setExecutionStartToCloseTimeout(Duration.ofSeconds(30))
+            .build();
+    GreetingWorkflow workflow =
+        workflowClient.newWorkflowStub(GreetingWorkflow.class, workflowOptions);
 
     // Start workflow asynchronously to not use another thread to query.
     WorkflowClient.start(workflow::createGreeting, "World");
