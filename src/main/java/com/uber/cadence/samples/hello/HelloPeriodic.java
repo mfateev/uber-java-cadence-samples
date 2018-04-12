@@ -40,7 +40,8 @@ import java.util.Optional;
  */
 public class HelloPeriodic {
 
-  private static final String TASK_LIST = "HelloPeriodic";
+  static final String TASK_LIST = "HelloPeriodic";
+  static final String PERIODIC_WORKFLOW_ID = "HelloPeriodic";
 
   public interface GreetingWorkflow {
     /**
@@ -50,7 +51,7 @@ public class HelloPeriodic {
      */
     @WorkflowMethod(
       // At most one instance
-      workflowId = "HelloPeriodic",
+      workflowId = PERIODIC_WORKFLOW_ID,
       // To allow starting workflow with the same ID after the previous one has terminated.
       workflowIdReusePolicy = WorkflowIdReusePolicy.AllowDuplicate,
       // Adjust this value to the maximum time workflow is expected to run
@@ -105,7 +106,7 @@ public class HelloPeriodic {
     }
   }
 
-  private static class GreetingActivitiesImpl implements GreetingActivities {
+  static class GreetingActivitiesImpl implements GreetingActivities {
     @Override
     public void greet(String greeting) {
       System.out.println("From " + Activity.getWorkflowExecution() + ": " + greeting);
