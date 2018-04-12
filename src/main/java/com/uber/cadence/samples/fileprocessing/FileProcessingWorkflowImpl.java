@@ -18,6 +18,7 @@
 package com.uber.cadence.samples.fileprocessing;
 
 import com.uber.cadence.activity.ActivityOptions;
+import com.uber.cadence.common.RetryOptions;
 import com.uber.cadence.workflow.Workflow;
 import java.net.URL;
 import java.time.Duration;
@@ -47,6 +48,16 @@ public class FileProcessingWorkflowImpl implements FileProcessingWorkflow {
 
   @Override
   public void processFile(URL source, URL destination) {
+    RetryOptions retryOptions =
+        new RetryOptions.Builder()
+            .setExpiration(Duration.ofSeconds(10))
+            .setInitialInterval(Duration.ofSeconds(1))
+            .build();
+    // Retries the whole sequence on any failure
+    Workflow.retry(retryOptions, () -> processFileImpl(source, destination));
+  }
+
+  private void processFileImpl(URL source, URL destination) {
     StoreActivities.TaskListFileNamePair downloaded = defaultTaskListStore.download(source);
 
     // Now initialize stubs that are specific to the returned task list.
