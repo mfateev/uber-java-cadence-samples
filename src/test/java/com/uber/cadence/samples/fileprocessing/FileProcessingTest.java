@@ -25,8 +25,10 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
+import com.uber.cadence.TimeoutType;
 import com.uber.cadence.client.WorkflowClient;
 import com.uber.cadence.samples.fileprocessing.StoreActivities.TaskListFileNamePair;
+import com.uber.cadence.testing.SimulatedTimeoutException;
 import com.uber.cadence.testing.TestWorkflowEnvironment;
 import com.uber.cadence.worker.Worker;
 import com.uber.cadence.workflow.Workflow;
@@ -142,7 +144,7 @@ public class FileProcessingTest {
 
     StoreActivities activitiesHost1 = mock(StoreActivities.class);
     when(activitiesHost1.process(FILE_NAME_UNPROCESSED))
-        .thenThrow(Workflow.wrap(new IOException("simulated")));
+        .thenThrow(new SimulatedTimeoutException(TimeoutType.SCHEDULE_TO_START));
     workerHost1.registerActivitiesImplementations(activitiesHost1);
     workerHost1.start();
 
