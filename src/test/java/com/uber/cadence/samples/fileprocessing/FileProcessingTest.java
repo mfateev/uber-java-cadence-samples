@@ -31,8 +31,6 @@ import com.uber.cadence.samples.fileprocessing.StoreActivities.TaskListFileNameP
 import com.uber.cadence.testing.SimulatedTimeoutException;
 import com.uber.cadence.testing.TestWorkflowEnvironment;
 import com.uber.cadence.worker.Worker;
-import com.uber.cadence.workflow.Workflow;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import org.junit.After;
@@ -73,6 +71,7 @@ public class FileProcessingTest {
         protected void failed(Throwable e, Description description) {
           if (testEnv != null) {
             System.err.println(testEnv.getDiagnostics());
+            testEnv.close();
           }
         }
       };
@@ -140,7 +139,7 @@ public class FileProcessingTest {
         .thenReturn(new TaskListFileNamePair(HOST_NAME_2, FILE_NAME_UNPROCESSED));
 
     worker.registerActivitiesImplementations(activities);
-    worker.start();
+    //    worker.start();
 
     StoreActivities activitiesHost1 = mock(StoreActivities.class);
     when(activitiesHost1.process(FILE_NAME_UNPROCESSED))

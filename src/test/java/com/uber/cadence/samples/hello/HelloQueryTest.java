@@ -43,6 +43,7 @@ public class HelloQueryTest {
         protected void failed(Throwable e, Description description) {
           if (testEnv != null) {
             System.err.println(testEnv.getDiagnostics());
+            testEnv.close();
           }
         }
       };

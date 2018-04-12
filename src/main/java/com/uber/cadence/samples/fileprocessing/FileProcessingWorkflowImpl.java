@@ -53,7 +53,7 @@ public class FileProcessingWorkflowImpl implements FileProcessingWorkflow {
             .setExpiration(Duration.ofSeconds(10))
             .setInitialInterval(Duration.ofSeconds(1))
             .build();
-    // Retries the whole sequence on any failure
+    // Retries the whole sequence on any failure, potentially on a different host
     Workflow.retry(retryOptions, () -> processFileImpl(source, destination));
   }
 

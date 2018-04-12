@@ -27,9 +27,8 @@ import com.uber.cadence.serviceclient.WorkflowServiceTChannel;
 import java.util.Optional;
 
 /**
- * Simple example utility to query workflow execution using Cadence query API. Cadence redirects
- * query to any currently running workflow worker for the workflow type of the requested workflow
- * execution.
+ * Queries a workflow execution using the Cadence query API. Cadence redirects a query to any
+ * currently running workflow worker for the workflow type of the requested workflow execution.
  *
  * @author fateev
  */

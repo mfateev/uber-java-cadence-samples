@@ -22,11 +22,10 @@ import static com.uber.cadence.samples.common.SampleConstants.DOMAIN;
 import com.uber.cadence.client.WorkflowClient;
 import java.net.URL;
 
-/** This is used for launching a Workflow instance of file processing sample. */
+/** Starts a file processing sample workflow. */
 public class FileProcessingStarter {
 
   public static void main(String[] args) throws Exception {
-    // Start Workflow instance
     WorkflowClient workflowClient = WorkflowClient.newInstance(DOMAIN);
     FileProcessingWorkflow workflow = workflowClient.newWorkflowStub(FileProcessingWorkflow.class);
 

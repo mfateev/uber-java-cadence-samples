@@ -27,7 +27,7 @@ import java.io.IOException;
 import org.apache.thrift.TException;
 
 /**
- * Simple example utility to pretty print workflow execution history.
+ * Registers the "sample" domain with the Cadence service.
  *
  * @author fateev
  */

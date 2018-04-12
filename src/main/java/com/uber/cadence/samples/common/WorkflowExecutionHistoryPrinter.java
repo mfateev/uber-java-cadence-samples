@@ -25,7 +25,7 @@ import com.uber.cadence.serviceclient.IWorkflowService;
 import com.uber.cadence.serviceclient.WorkflowServiceTChannel;
 
 /**
- * Simple example utility to pretty print workflow execution history.
+ * Prints a workflow execution history to the console.
  *
  * @author fateev
  */

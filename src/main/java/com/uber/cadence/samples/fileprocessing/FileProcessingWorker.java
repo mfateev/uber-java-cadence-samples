@@ -24,7 +24,7 @@ import java.lang.management.ManagementFactory;
 
 /**
  * This is the process which hosts all workflows and activities in this sample. Run multiple
- * instances of the worker in different windows. Then start workflow by running
+ * instances of the worker in different windows. Then start a workflow by running the
  * FileProcessingStarter. Note that all activities always execute on the same worker. But each time
  * they might end up on a different worker as the first activity is dispatched to the common task
  * list.

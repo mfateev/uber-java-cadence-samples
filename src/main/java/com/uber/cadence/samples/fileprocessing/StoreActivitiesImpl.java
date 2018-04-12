@@ -25,7 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-/** Sample activities implementation. */
+/** Store activities implementation. */
 public class StoreActivitiesImpl implements StoreActivities {
 
   private final String hostSpecificTaskList;
