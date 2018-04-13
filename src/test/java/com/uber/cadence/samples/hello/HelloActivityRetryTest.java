@@ -87,7 +87,7 @@ public class HelloActivityRetryTest {
 
     GreetingWorkflow workflow =
         workflowClient.newWorkflowStub(GreetingWorkflow.class, workflowOptions);
-    // Execute a workflow waiting for it complete.
+    // Execute a workflow waiting for it to complete.
     String greeting = workflow.getGreeting("World");
     assertEquals("Hello World!", greeting);
   }
@@ -112,7 +112,7 @@ public class HelloActivityRetryTest {
             .build();
     GreetingWorkflow workflow =
         workflowClient.newWorkflowStub(GreetingWorkflow.class, workflowOptions);
-    // Execute a workflow waiting for it complete.
+    // Execute a workflow waiting for it to complete.
     String greeting = workflow.getGreeting("World");
     assertEquals("Hello World!", greeting);
 

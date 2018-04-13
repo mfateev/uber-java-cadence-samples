@@ -78,7 +78,7 @@ public class HelloAsyncTest {
     worker.start();
 
     GreetingWorkflow workflow = workflowClient.newWorkflowStub(GreetingWorkflow.class);
-    // Execute a workflow waiting for it complete.
+    // Execute a workflow waiting for it to complete.
     String greeting = workflow.getGreeting("World");
     assertEquals("Hello World!\nBye World!", greeting);
   }
@@ -92,7 +92,7 @@ public class HelloAsyncTest {
     worker.start();
 
     GreetingWorkflow workflow = workflowClient.newWorkflowStub(GreetingWorkflow.class);
-    // Execute a workflow waiting for it complete.
+    // Execute a workflow waiting for it to complete.
     String greeting = workflow.getGreeting("World");
     assertEquals("Hello World!\nBye World!", greeting);
   }

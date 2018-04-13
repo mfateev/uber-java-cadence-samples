@@ -57,10 +57,9 @@ public class HelloQueryTest {
     testEnv = TestWorkflowEnvironment.newInstance();
 
     worker = testEnv.newWorker(HelloQuery.TASK_LIST);
-    // Comment the above line and uncomment the below one to
-    // See how the TestWatcher rule prints the history of the stuck
-    // workflow as its decision task is never picked up.
-    //    worker = testEnv.newWorker("InvalidTaskList");
+    // Comment the above line and uncomment the below one to see how the TestWatcher rule prints
+    // the history of the stuck workflow as its decision task is never picked up.
+    // worker = testEnv.newWorker("InvalidTaskList");
 
     worker.registerWorkflowImplementationTypes(HelloQuery.GreetingWorkflowImpl.class);
     worker.start();
@@ -87,8 +86,8 @@ public class HelloQueryTest {
     // Start workflow asynchronously to not use another thread to query.
     WorkflowClient.start(workflow::createGreeting, "World");
 
-    // After start for getGreeting returns the workflow is guaranteed to be started.
-    // So we can send signal to it using workflow stub.
+    // After start for getGreeting returns, the workflow is guaranteed to be started.
+    // So we can send a signal to it using workflow stub.
     assertEquals("Hello World!", workflow.queryGreeting());
 
     // Unit tests should call TestWorkflowEnvironment.sleep.

@@ -32,7 +32,7 @@ import java.util.concurrent.ForkJoinPool;
 
 /**
  * Demonstrates an asynchronous activity implementation. Requires a local instance of Cadence server
- * running.
+ * to be running.
  */
 public class HelloAsyncActivityCompletion {
 
@@ -44,7 +44,7 @@ public class HelloAsyncActivityCompletion {
     String getGreeting(String name);
   }
 
-  /** Activity interface is just a POJI */
+  /** Activity interface is just a POJI. * */
   public interface GreetingActivities {
     @ActivityMethod(scheduleToCloseTimeoutSeconds = 10)
     String composeGreeting(String greeting, String name);
@@ -55,15 +55,15 @@ public class HelloAsyncActivityCompletion {
 
     /**
      * Activity stub implements activity interface and proxies calls to it to Cadence activity
-     * invocations. As activities are reentrant only a single stub can be used for multiple activity
-     * invocations.
+     * invocations. Because activities are reentrant, only a single stub can be used for multiple
+     * activity invocations.
      */
     private final GreetingActivities activities =
         Workflow.newActivityStub(GreetingActivities.class);
 
     @Override
     public String getGreeting(String name) {
-      // This is blocking call that returns only after activity is completed.
+      // This is a blocking call that returns only after the activity has completed.
       return activities.composeGreeting("Hello", name);
     }
   }
@@ -76,13 +76,13 @@ public class HelloAsyncActivityCompletion {
     }
 
     /**
-     * Demonstrates how implement an activity asynchronously. When {@link
+     * Demonstrates how to implement an activity asynchronously. When {@link
      * Activity#doNotCompleteOnReturn()} is called the activity implementation function returning
      * doesn't complete the activity.
      */
     @Override
     public String composeGreeting(String greeting, String name) {
-      // TaskToken is a correlation token used to match activity task with completion
+      // TaskToken is a correlation token used to match an activity task with its completion
       byte[] taskToken = Activity.getTaskToken();
       // In real life this request can be executed anywhere. By a separate service for
       // example.
@@ -94,19 +94,19 @@ public class HelloAsyncActivityCompletion {
 
     private void composeGreetingAsync(byte[] taskToken, String greeting, String name) {
       String result = greeting + " " + name + "!";
-      // To complete activity from a different thread or process uses ActivityCompletionClient.
-      // In real applications it is initialized by a process that performs the completion.
+      // To complete an activity from a different thread or process use ActivityCompletionClient.
+      // In real applications the client is initialized by a process that performs the completion.
       completionClient.complete(taskToken, result);
     }
   }
 
   public static void main(String[] args) throws ExecutionException, InterruptedException {
-    // Start a workflow execution. Usually it is done from another program.
+    // Start a workflow execution. Usually this is done from another program.
     WorkflowClient workflowClient = WorkflowClient.newInstance(DOMAIN);
 
-    // Start a worker that hosts both workflow and activity implementation
+    // Start a worker that hosts both workflow and activity implementations.
     Worker worker = new Worker(DOMAIN, TASK_LIST);
-    // Workflows are stateful. So need a type to create instances.
+    // Workflows are stateful. So you need a type to create instances.
     worker.registerWorkflowImplementationTypes(GreetingWorkflowImpl.class);
     // Activities are stateless and thread safe. So a shared instance is used.
     // CompletionClient is passed to activity here only to support unit testing.
@@ -120,7 +120,7 @@ public class HelloAsyncActivityCompletion {
     // Execute a workflow returning a future that can be used to wait for the workflow
     // completion.
     CompletableFuture<String> greeting = WorkflowClient.execute(workflow::getGreeting, "World");
-    // Wait for workflow completion
+    // Wait for workflow completion.
     System.out.println(greeting.get());
     System.exit(0);
   }

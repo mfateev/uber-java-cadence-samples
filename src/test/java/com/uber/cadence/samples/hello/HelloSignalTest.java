@@ -83,7 +83,7 @@ public class HelloSignalTest {
     WorkflowClient.start(workflow::getGreeting);
 
     // After start for getGreeting returns the workflow is guaranteed to be started.
-    // So we can send signal to it using workflow stub immediately.
+    // So we can send a signal to it using workflow stub immediately.
     // But just to demonstrate the unit testing of a long running workflow adding a long sleep here.
     testEnv.sleep(Duration.ofDays(1));
     workflow.waitForName("World");

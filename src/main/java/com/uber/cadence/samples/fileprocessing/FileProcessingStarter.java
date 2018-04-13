@@ -34,7 +34,7 @@ public class FileProcessingStarter {
     URL source = new URL("http://www.google.com/");
     URL destination = new URL("http://dummy");
 
-    // This is going to block until the workflow completion.
+    // This is going to block until the workflow completes.
     // This is rarely used in production. Use the commented code below for async start version.
     workflow.processFile(source, destination);
     System.out.println("FileProcessingWorkflow completed");

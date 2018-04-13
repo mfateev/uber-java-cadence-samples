@@ -25,8 +25,8 @@ import com.uber.cadence.serviceclient.WorkflowServiceTChannel;
 import com.uber.cadence.worker.Worker;
 
 /**
- * Queries a workflow execution by getting a history from the Cadence and executing it on a local
- * worker. Use this approach to debug a workflow execution in a local environment.
+ * Queries a workflow execution by getting a history from the Cadence service and executing it on a
+ * local worker. Use this approach to debug a workflow execution in a local environment.
  *
  * @author fateev
  */

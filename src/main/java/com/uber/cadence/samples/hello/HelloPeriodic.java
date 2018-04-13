@@ -36,7 +36,7 @@ import java.util.Optional;
 
 /**
  * Demonstrates a "cron" workflow that executes activity periodically. Requires a local instance of
- * Cadence server running.
+ * Cadence server to be running.
  */
 public class HelloPeriodic {
 
@@ -46,16 +46,16 @@ public class HelloPeriodic {
   public interface GreetingWorkflow {
     /**
      * Use single fixed ID to ensure that there is at most one instance running. To run multiple
-     * instances set different ids through WorkflowOptions passed to WorkflowClient.newWorkflowStub
-     * call.
+     * instances set different IDs through WorkflowOptions passed to the
+     * WorkflowClient.newWorkflowStub call.
      */
     @WorkflowMethod(
-      // At most one instance
+      // At most one instance.
       workflowId = PERIODIC_WORKFLOW_ID,
       // To allow starting workflow with the same ID after the previous one has terminated.
       workflowIdReusePolicy = WorkflowIdReusePolicy.AllowDuplicate,
-      // Adjust this value to the maximum time workflow is expected to run
-      // It usually depends on number of repetitions and interval between them.
+      // Adjust this value to the maximum time workflow is expected to run.
+      // It usually depends on the number of repetitions and interval between them.
       executionStartToCloseTimeoutSeconds = 300,
       taskList = TASK_LIST
     )
@@ -73,9 +73,9 @@ public class HelloPeriodic {
   public static class GreetingWorkflowImpl implements GreetingWorkflow {
 
     /**
-     * This value is so low just to make the example interesting to watch. In real life I would use
-     * something like 100 or value that matches a business cycle. For example if it runs once an
-     * hour 24 would make sense.
+     * This value is so low just to make the example interesting to watch. In real life you would
+     * use something like 100 or a value that matches a business cycle. For example if it runs once
+     * an hour 24 would make sense.
      */
     private final int CONTINUE_AS_NEW_FREQUENCEY = 10;
 
@@ -94,8 +94,8 @@ public class HelloPeriodic {
 
     @Override
     public void greetPeriodically(String name, Duration delay) {
-      // Loop predefined number of times then continue this workflow as new.
-      // It is needed to periodically truncate history size.
+      // Loop the predefined number of times then continue this workflow as new.
+      // This is needed to periodically truncate the history size.
       for (int i = 0; i < CONTINUE_AS_NEW_FREQUENCEY; i++) {
         activities.greet("Hello " + name + "!");
         Workflow.sleep(delay);
@@ -114,19 +114,19 @@ public class HelloPeriodic {
   }
 
   public static void main(String[] args) throws InterruptedException {
-    // Start a worker that hosts both workflow and activity implementation
+    // Start a worker that hosts both workflow and activity implementations.
     Worker worker = new Worker(DOMAIN, TASK_LIST);
-    // Workflows are stateful. So need a type to create instances.
+    // Workflows are stateful. So you need a type to create instances.
     worker.registerWorkflowImplementationTypes(GreetingWorkflowImpl.class);
     // Activities are stateless and thread safe. So a shared instance is used.
     worker.registerActivitiesImplementations(new GreetingActivitiesImpl());
     // Start listening to the workflow and activity task lists.
     worker.start();
 
-    // Start a workflow execution. Usually it is done from another program.
+    // Start a workflow execution. Usually this is done from another program.
     WorkflowClient workflowClient = WorkflowClient.newInstance(DOMAIN);
     // To ensure that this daemon type workflow is always running try to start it periodically
-    // ignoring duplicated exception.
+    // ignoring the duplicated exception.
     // It is only to protect from application level failures.
     // Failures of a workflow worker don't lead to workflow failures.
     WorkflowExecution execution = null;

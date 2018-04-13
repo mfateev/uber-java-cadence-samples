@@ -26,12 +26,12 @@ import com.uber.cadence.workflow.Promise;
 import com.uber.cadence.workflow.Workflow;
 import com.uber.cadence.workflow.WorkflowMethod;
 
-/** Demonstrates a child workflow. Requires a local instance of the Cadence server running. */
+/** Demonstrates a child workflow. Requires a local instance of the Cadence server to be running. */
 public class HelloChild {
 
   static final String TASK_LIST = "HelloChild";
 
-  /** Parent workflow interface */
+  /** The parent workflow interface. */
   public interface GreetingWorkflow {
     /** @return greeting string */
     @WorkflowMethod(executionStartToCloseTimeoutSeconds = 10, taskList = TASK_LIST)
@@ -54,14 +54,14 @@ public class HelloChild {
 
       // This is a blocking call that returns only after the child has completed.
       Promise<String> greeting = Async.function(child::composeGreeting, "Hello", name);
-      // Do something else here
+      // Do something else here.
       return greeting.get(); // blocks waiting for the child to complete.
     }
   }
 
   /**
    * The child workflow implementation. A workflow implementation must always be public for the
-   * Cadence to be able to create instances.
+   * Cadence library to be able to create instances.
    */
   public static class GreetingChildImpl implements GreetingChild {
     @Override
@@ -77,11 +77,11 @@ public class HelloChild {
     // Start listening to the workflow task list.
     worker.start();
 
-    // Start a workflow execution. Usually it is done from another program.
+    // Start a workflow execution. Usually this is done from another program.
     WorkflowClient workflowClient = WorkflowClient.newInstance(DOMAIN);
     // Get a workflow stub using the same task list the worker uses.
     GreetingWorkflow workflow = workflowClient.newWorkflowStub(GreetingWorkflow.class);
-    // Execute a workflow waiting for it complete.
+    // Execute a workflow waiting for it to complete.
     String greeting = workflow.getGreeting("World");
     System.out.println(greeting);
     System.exit(0);

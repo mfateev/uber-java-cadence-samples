@@ -31,7 +31,7 @@ import java.time.Duration;
 
 /**
  * Demonstrates async invocation of an entire sequence of activities. Requires a local instance of
- * Cadence server running.
+ * Cadence server to be running.
  */
 public class HelloAsyncLambda {
 
@@ -43,7 +43,7 @@ public class HelloAsyncLambda {
     String getGreeting(String name);
   }
 
-  /** Activity interface is just a POJI */
+  /** Activity interface is just a POJI. * */
   public interface GreetingActivities {
     String getGreeting();
 
@@ -55,8 +55,8 @@ public class HelloAsyncLambda {
 
     /**
      * Activity stub implements activity interface and proxies calls to it to Cadence activity
-     * invocations. As activities are reentrant only a single stub can be used for multiple activity
-     * invocations.
+     * invocations. Because activities are reentrant, only a single stub can be used for multiple
+     * activity invocations.
      */
     private final GreetingActivities activities =
         Workflow.newActivityStub(
@@ -100,16 +100,16 @@ public class HelloAsyncLambda {
   }
 
   public static void main(String[] args) {
-    // Start a worker that hosts both workflow and activity implementation
+    // Start a worker that hosts both workflow and activity implementations.
     Worker worker = new Worker(DOMAIN, TASK_LIST);
-    // Workflows are stateful. So need a type to create instances.
+    // Workflows are stateful. So you need a type to create instances.
     worker.registerWorkflowImplementationTypes(GreetingWorkflowImpl.class);
     // Activities are stateless and thread safe. So a shared instance is used.
     worker.registerActivitiesImplementations(new GreetingActivitiesImpl());
     // Start listening to the workflow and activity task lists.
     worker.start();
 
-    // Start a workflow execution. Usually it is done from another program.
+    // Start a workflow execution. Usually this is done from another program.
     WorkflowClient workflowClient = WorkflowClient.newInstance(DOMAIN);
     // Get a workflow stub using the same task list the worker uses.
     WorkflowOptions workflowOptions =
@@ -119,7 +119,7 @@ public class HelloAsyncLambda {
             .build();
     GreetingWorkflow workflow =
         workflowClient.newWorkflowStub(GreetingWorkflow.class, workflowOptions);
-    // Execute a workflow waiting for it complete.
+    // Execute a workflow waiting for it to complete.
     String greeting = workflow.getGreeting("World");
     System.out.println(greeting);
     System.exit(0);

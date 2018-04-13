@@ -78,7 +78,7 @@ public class FileProcessingTest {
 
   private TestWorkflowEnvironment testEnv;
   private Worker worker;
-  // Host specific workers
+  // Host specific workers.
   private Worker workerHost1;
   private Worker workerHost2;
 
@@ -119,7 +119,7 @@ public class FileProcessingTest {
 
     FileProcessingWorkflow workflow = workflowClient.newWorkflowStub(FileProcessingWorkflow.class);
 
-    // Execute workflow waiting for completion
+    // Execute workflow waiting for completion.
     workflow.processFile(SOURCE, DESTINATION);
 
     verify(activities).download(SOURCE);
@@ -139,7 +139,7 @@ public class FileProcessingTest {
         .thenReturn(new TaskListFileNamePair(HOST_NAME_2, FILE_NAME_UNPROCESSED));
 
     worker.registerActivitiesImplementations(activities);
-    //    worker.start();
+    worker.start();
 
     StoreActivities activitiesHost1 = mock(StoreActivities.class);
     when(activitiesHost1.process(FILE_NAME_UNPROCESSED))

@@ -29,7 +29,7 @@ import com.uber.cadence.workflow.Workflow;
 import com.uber.cadence.workflow.WorkflowMethod;
 
 /**
- * Demonstrates asynchronous activity invocation. Requires a local instance of Cadence server
+ * Demonstrates asynchronous activity invocation. Requires a local instance of Cadence server to be
  * running.
  */
 public class HelloAsync {
@@ -54,8 +54,8 @@ public class HelloAsync {
 
     /**
      * Activity stub implements activity interface and proxies calls to it to Cadence activity
-     * invocations. As activities are reentrant only a single stub can be used for multiple activity
-     * invocations.
+     * invocations. Because activities are reentrant, only a single stub can be used for multiple
+     * activity invocations.
      */
     private final GreetingActivities activities =
         Workflow.newActivityStub(GreetingActivities.class);
@@ -79,20 +79,20 @@ public class HelloAsync {
   }
 
   public static void main(String[] args) {
-    // Start a worker that hosts both workflow and activity implementation
+    // Start a worker that hosts both workflow and activity implementations.
     Worker worker = new Worker(DOMAIN, TASK_LIST);
-    // Workflows are stateful. So need a type to create instances.
+    // Workflows are stateful. So you need a type to create instances.
     worker.registerWorkflowImplementationTypes(GreetingWorkflowImpl.class);
     // Activities are stateless and thread safe. So a shared instance is used.
     worker.registerActivitiesImplementations(new GreetingActivitiesImpl());
     // Start listening to the workflow and activity task lists.
     worker.start();
 
-    // Start a workflow execution. Usually it is done from another program.
+    // Start a workflow execution. Usually this is done from another program.
     WorkflowClient workflowClient = WorkflowClient.newInstance(DOMAIN);
     // Get a workflow stub using the same task list the worker uses.
     GreetingWorkflow workflow = workflowClient.newWorkflowStub(GreetingWorkflow.class);
-    // Execute a workflow waiting for it complete.
+    // Execute a workflow waiting for it to complete.
     String greeting = workflow.getGreeting("World");
     System.out.println(greeting);
     System.exit(0);

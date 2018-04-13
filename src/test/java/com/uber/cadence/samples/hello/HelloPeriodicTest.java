@@ -91,12 +91,12 @@ public class HelloPeriodicTest {
 
     // Get a workflow stub using the same task list the worker uses.
     GreetingWorkflow workflow = workflowClient.newWorkflowStub(GreetingWorkflow.class);
-    // Execute a workflow waiting for it complete.
+    // Execute a workflow waiting for it to complete.
     WorkflowExecution execution =
         WorkflowClient.start(workflow::greetPeriodically, "World", Duration.ofSeconds(1));
     assertEquals(PERIODIC_WORKFLOW_ID, execution.getWorkflowId());
     // Validate that workflow was continued as new at least once.
-    // Use TestWorkflowEnvironment.sleep to execute the unit test without real sleeping.
+    // Use TestWorkflowEnvironment.sleep to execute the unit test without really sleeping.
     testEnv.sleep(Duration.ofMinutes(1));
     ListClosedWorkflowExecutionsRequest request =
         new ListClosedWorkflowExecutionsRequest()
@@ -118,11 +118,11 @@ public class HelloPeriodicTest {
 
     // Get a workflow stub using the same task list the worker uses.
     GreetingWorkflow workflow = workflowClient.newWorkflowStub(GreetingWorkflow.class);
-    // Execute a workflow waiting for it complete.
+    // Execute a workflow waiting for it to complete.
     WorkflowExecution execution =
         WorkflowClient.start(workflow::greetPeriodically, "World", Duration.ofSeconds(1));
     assertEquals(PERIODIC_WORKFLOW_ID, execution.getWorkflowId());
-    // Use TestWorkflowEnvironment.sleep to execute the unit test without real sleeping.
+    // Use TestWorkflowEnvironment.sleep to execute the unit test without really sleeping.
     testEnv.sleep(Duration.ofMinutes(1));
     verify(activities, atLeast(5)).greet(anyString());
   }

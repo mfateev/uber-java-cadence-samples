@@ -30,8 +30,8 @@ import com.uber.cadence.workflow.WorkflowMethod;
 import java.time.Duration;
 
 /**
- * Demonstrates activity retries using exponential backoff algorithm. Requires a local instance of
- * Cadence server running.
+ * Demonstrates activity retries using an exponential backoff algorithm. Requires a local instance
+ * of the Cadence service to be running.
  */
 public class HelloActivityRetry {
 
@@ -73,7 +73,7 @@ public class HelloActivityRetry {
 
     @Override
     public String getGreeting(String name) {
-      // This is blocking call that returns only after activity is completed.
+      // This is a blocking call that returns only after activity is completed.
       return activities.composeGreeting("Hello", name);
     }
   }
@@ -99,16 +99,16 @@ public class HelloActivityRetry {
   }
 
   public static void main(String[] args) {
-    // Start a worker that hosts both workflow and activity implementation
+    // Start a worker that hosts both workflow and activity implementations.
     Worker worker = new Worker(DOMAIN, TASK_LIST);
-    // Workflows are stateful. So need a type to create instances.
+    // Workflows are stateful. So you need a type to create instances.
     worker.registerWorkflowImplementationTypes(GreetingWorkflowImpl.class);
     // Activities are stateless and thread safe. So a shared instance is used.
     worker.registerActivitiesImplementations(new GreetingActivitiesImpl());
     // Start listening to the workflow and activity task lists.
     worker.start();
 
-    // Start a workflow execution. Usually it is done from another program.
+    // Start a workflow execution. Usually this is done from another program.
     WorkflowClient workflowClient = WorkflowClient.newInstance(DOMAIN);
     // Get a workflow stub using the same task list the worker uses.
     WorkflowOptions workflowOptions =
@@ -118,7 +118,7 @@ public class HelloActivityRetry {
             .build();
     GreetingWorkflow workflow =
         workflowClient.newWorkflowStub(GreetingWorkflow.class, workflowOptions);
-    // Execute a workflow waiting for it complete.
+    // Execute a workflow waiting for it to complete.
     String greeting = workflow.getGreeting("World");
     System.out.println(greeting);
     System.exit(0);

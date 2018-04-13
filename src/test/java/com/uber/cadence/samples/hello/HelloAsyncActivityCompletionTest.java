@@ -81,7 +81,7 @@ public class HelloAsyncActivityCompletionTest {
     GreetingWorkflow workflow = workflowClient.newWorkflowStub(GreetingWorkflow.class);
     // Execute a workflow asynchronously.
     CompletableFuture<String> greeting = WorkflowClient.execute(workflow::getGreeting, "World");
-    // Wait for workflow completion
+    // Wait for workflow completion.
     assertEquals("Hello World!", greeting.get());
   }
 }

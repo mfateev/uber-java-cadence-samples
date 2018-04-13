@@ -24,20 +24,20 @@ import java.net.URL;
 import java.time.Duration;
 
 /**
- * This implementation of FileProcessingWorkflow downloads the file, zips it and uploads it to a
- * destination. An important requirement for such workflow is that while a first activity can run on
- * any host, the second and third must run on the same host as the first one. It is achieved through
- * use of a host specific task list. The first activity returns the name of the host specific task
- * list and all others are dispatched using stub that is configured with it. It assumes that
- * FileProcessingWorker has a Worker running on the same task list.
+ * This implementation of FileProcessingWorkflow downloads the file, zips it, and uploads it to a
+ * destination. An important requirement for such a workflow is that while a first activity can run
+ * on any host, the second and third must run on the same host as the first one. This is achieved
+ * through use of a host specific task list. The first activity returns the name of the host
+ * specific task list and all other activities are dispatched using the stub that is configured with
+ * it. This assumes that FileProcessingWorker has a worker running on the same task list.
  */
 public class FileProcessingWorkflowImpl implements FileProcessingWorkflow {
 
-  // Uses default task list shared by the pool of workers.
+  // Uses the default task list shared by the pool of workers.
   private final StoreActivities defaultTaskListStore;
 
   public FileProcessingWorkflowImpl() {
-    // Create activity clients
+    // Create activity clients.
     ActivityOptions ao =
         new ActivityOptions.Builder()
             .setScheduleToCloseTimeout(Duration.ofSeconds(10))
@@ -53,7 +53,7 @@ public class FileProcessingWorkflowImpl implements FileProcessingWorkflow {
             .setExpiration(Duration.ofSeconds(10))
             .setInitialInterval(Duration.ofSeconds(1))
             .build();
-    // Retries the whole sequence on any failure, potentially on a different host
+    // Retries the whole sequence on any failure, potentially on a different host.
     Workflow.retry(retryOptions, () -> processFileImpl(source, destination));
   }
 
@@ -69,10 +69,10 @@ public class FileProcessingWorkflowImpl implements FileProcessingWorkflow {
     StoreActivities hostSpecificStore =
         Workflow.newActivityStub(StoreActivities.class, hostActivityOptions);
 
-    // Call processFile activity to zip the file
-    // Call the activity to process the file using worker specific task list
+    // Call processFile activity to zip the file.
+    // Call the activity to process the file using worker-specific task list.
     String processed = hostSpecificStore.process(downloaded.getFileName());
-    // Call upload activity to upload zipped file
+    // Call upload activity to upload the zipped file.
     hostSpecificStore.upload(processed, destination);
   }
 }

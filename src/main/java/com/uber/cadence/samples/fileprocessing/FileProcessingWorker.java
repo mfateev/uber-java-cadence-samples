@@ -23,7 +23,7 @@ import com.uber.cadence.worker.Worker;
 import java.lang.management.ManagementFactory;
 
 /**
- * This is the process which hosts all workflows and activities in this sample. Run multiple
+ * This is the process that hosts all workflows and activities in this sample. Run multiple
  * instances of the worker in different windows. Then start a workflow by running the
  * FileProcessingStarter. Note that all activities always execute on the same worker. But each time
  * they might end up on a different worker as the first activity is dispatched to the common task
@@ -37,7 +37,7 @@ public class FileProcessingWorker {
 
     String hostSpecifiTaskList = ManagementFactory.getRuntimeMXBean().getName();
 
-    // Start worker to poll the common task list
+    // Start worker to poll the common task list.
     final Worker workerForCommonTaskList = new Worker(DOMAIN, TASK_LIST);
     workerForCommonTaskList.registerWorkflowImplementationTypes(FileProcessingWorkflowImpl.class);
     StoreActivitiesImpl storeActivityImpl = new StoreActivitiesImpl(hostSpecifiTaskList);
@@ -45,7 +45,7 @@ public class FileProcessingWorker {
     workerForCommonTaskList.start();
     System.out.println("Worker started for task list: " + TASK_LIST);
 
-    // Start worker to poll the host specific task list
+    // Start worker to poll the host-specific task list.
     final Worker workerForHostSpecificTaskList = new Worker(DOMAIN, hostSpecifiTaskList);
     workerForHostSpecificTaskList.registerActivitiesImplementations(storeActivityImpl);
     workerForHostSpecificTaskList.start();
